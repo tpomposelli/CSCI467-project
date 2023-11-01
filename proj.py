@@ -33,20 +33,30 @@ def main():
 
     maxValues = df[['% of Cap S', 'Salary S']].max()
     
-    # Separating training and testing bases
+    model = LinearRegression()
+    model.fit(X_train[['PTS_per_game']], y_train)
+    r_sq = model.score(X_test[['PTS_per_game']], y_test)
+    y_preds = model.predict(X_test[['PTS_per_game']])
+    rmse = mean_squared_error(y_test, y_preds, squared=False)
+    print("The accuracy for is", r_sq, "RMSE:", rmse)
+
     model = LinearRegression()
     model.fit(X_train, y_train)
     r_sq = model.score(X_dev, y_dev)
     y_preds = model.predict(X_dev)
     rmse = mean_squared_error(y_dev, y_preds, squared=False)
-    print("The accuracy for", col, "is", r_sq, "RMSE:", rmse)
+    print("The accuracy for is", r_sq, "RMSE:", rmse)
 
     model = LinearRegression()
     model.fit(X_train, y_train)
     r_sq = model.score(X_test, y_test)
     y_preds = model.predict(X_test)
     rmse = mean_squared_error(y_test, y_preds, squared=False)
-    print("The accuracy for", col, "is", r_sq, "RMSE:", rmse)
+    print("The accuracy is", r_sq, "RMSE:", rmse)
+    #print(X_test)
+    y_test['difference'] = y_test[['% of Cap S']] - y_preds
+    y_test.sort_values(by=['difference'])
+    print(y_test.sort_values(by=['difference']))
 
 
 
