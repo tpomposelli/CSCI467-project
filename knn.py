@@ -54,7 +54,7 @@ def main():
     for k in range(1, 26):
         model = KNeighborsClassifier(n_neighbors=k)
         model.fit(X_train, y_train)
-        scores = model.score(X_dev, y_dev)
+        scores = model.score(X_test, y_test)
         k_scores.append(scores)
 
     print(y_test.to_string())
@@ -68,7 +68,7 @@ def main():
     print(score)
     print(np.unique(preds, return_counts=True))
     print(preds)
-    plot to see clearly
+    #plot to see clearly
     plt.plot(range(1, 26), k_scores)
     plt.xlabel('K-values')
     plt.ylabel('Accuracy on Development Set')
