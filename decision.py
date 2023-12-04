@@ -15,6 +15,7 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import KFold
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix
+from sklearn.tree import DecisionTreeClassifier
 
 
 df = pd.read_csv("final_data.csv")
@@ -40,25 +41,22 @@ def main():
 
     X_train, X_t, y_train, y_t = train_test_split(X, y, test_size=0.3, random_state=42)
     X_dev, X_test, y_dev, y_test = train_test_split(X_t, y_t, test_size=0.33, random_state=42)
-
-    print(y.value_counts())
-    print(y_dev.value_counts())
-    print(y_test.value_counts())
-    print(y_train.value_counts())
-    print(y.count())
-    print(y_dev.count())
-    print(y_test.count())
-    print(y_train.count())
     k_scores = []
-    for k in range(1, 26):
-        model = KNeighborsClassifier(n_neighbors=k)
+    #Loop through k and 
+    for k in range(1, 10):
+        model = DecisionTreeClassifier(
+                max_depth=k,
+                random_state=42
+            )
         model.fit(X_train, y_train)
         scores = model.score(X_dev, y_dev)
         k_scores.append(scores)
 
-    print(y_test.to_string())
 
-    model = KNeighborsClassifier(n_neighbors=18)
+    model = DecisionTreeClassifier(
+                max_depth=3,
+                random_state=42
+            )
     model.fit(X_train, y_train)
     score = model.score(X_test, y_test)
     preds = model.predict(X_test)
@@ -66,7 +64,7 @@ def main():
     print(np.unique(preds, return_counts=True))
     print(preds)
     #plot to see clearly
-    plt.plot(range(1, 26), k_scores)
+    plt.plot(range(1, 10), k_scores)
     plt.xlabel('K-values')
     plt.ylabel('Accuracy on Development Set')
     plt.title("Performance of K-values on Development Set")
